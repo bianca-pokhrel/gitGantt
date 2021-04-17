@@ -70,8 +70,8 @@ gitGantt.prototype = {
             let left = 0,
             width = 0;
     
-            if (startDay.endsWith("½")) {
-            const filteredArray = days_arr.filter(day => day.textContent == startDay.slice(0, -2));
+            if (startDay.endsWith("1")) {
+            const filteredArray = days_arr.filter(day => day.textContent == startDay.slice(0, -1));
             left = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2;
             console.log(filteredArray)
             } else {
@@ -79,8 +79,8 @@ gitGantt.prototype = {
             left = filteredArray[0].offsetLeft;
             }
     
-            if (endDay.endsWith("½")) {
-                const filteredArray = days_arr.filter(day => day.textContent == endDay.slice(0, -2));
+            if (endDay.endsWith("1")) {
+                const filteredArray = days_arr.filter(day => day.textContent == endDay.slice(0, -1));
                 width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2 - left;
             } else {
                 const filteredArray = days_arr.filter(day => day.textContent == endDay);
@@ -89,7 +89,7 @@ gitGantt.prototype = {
 
             newTask.style.left = `${left}px`;
             newTask.style.width = `${width}px`;
-            newTask.style.backgroundColor = "blue";
+            newTask.style.backgroundColor = "#bdfff8";
             newTask.style.opacity = 1;
             newTask.appendChild(document.createTextNode(taskName))
             newTask.childNodes[0].style = "font-fill: white;"
@@ -131,30 +131,33 @@ function rerenderTasks() {
         let days_arr = [...days_ul]
         const startDay = dur_split[0];
         const endDay = dur_split[1];
-        console.log(startDay.slice(0,-2))
+        console.log(startDay.slice(0,-1))
         let left = 0,
         width=0
 
     
-        if (startDay.endsWith("½")) {
-            const find_corrDay = days_arr.filter(day => day.textContent == startDay.slice(0, -2));
-            left = find_corrDay[0].offsetLeft;
+        if (startDay.endsWith("1")) {
+            const find_corrDay = days_arr.filter(day => day.textContent == startDay.slice(0, -1));
+            left = find_corrDay[0].offsetLeft ;
+            console.log(find_corrDay)
         } else {
             const find_corrDay = days_arr.filter(day => day.textContent == startDay);
             left = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth / 2;
+            console.log(find_corrDay)
         }
 
-        if (endDay.endsWith("½")) {
-            const find_corrDay = days_arr.filter(day => day.textContent == endDay.slice(0, -2));
-            width = find_corrDay[0].offsetLeft + find_corrDay[0].offsetWidth / 2 - left;
+        if (endDay.endsWith("1")) {
+            const find_corrDay = days_arr.filter(day => day.textContent == endDay.slice(0, -1));
+            width = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth*2;
+            console.log(find_corrDay)
         } else {
             const find_corrDay = days_arr.filter(day => day.textContent == endDay);
-            width = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth - left;
+            width = find_corrDay[0].offsetLeft;
+            console.log(find_corrDay)
         }
 
         tasks.style.left = `${left}px`;
         tasks.style.width = `${width}px`;
-        tasks.style.backgroundColor = "blue";
         tasks.style.opacity = 1;
 
     })
