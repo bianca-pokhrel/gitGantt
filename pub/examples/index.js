@@ -6,6 +6,8 @@ document.querySelector('#gantt-chart').appendChild(emptyGantt.chart_setup)
 
 
 emptyGantt.addTask("tue½-wed", "Task")
-emptyGantt.addTask("mon-wed", "Task2")
+//emptyGantt.addTask("mon-wed", "Task2")
 
-emptyGantt.deleteTask("0")
+//emptyGantt.deleteTask("0")
+
+emptyGantt.editTask("0", "mon-thu", "Do laundry")

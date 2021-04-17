@@ -3,7 +3,11 @@
 // given a new gantt chart instance with parameters, create the gantt chart and in a separate js file, inject into the HTML
 // need a list of tasks, and their start end time... so maybe in a JSON format? 
 // Keys are tasks and their values are their start/end time?
-// can do this in add task though... don't need that in the constructor
+
+var tasks = document.createElement("ul")
+tasks.id = "tasks-list"// can do this in add task though... don't need that in the constructor
+
+
 function gitGantt() {
     //the constructor should just create an empty gantt chart with height/width specs provided by dev. 
     //the columns for the days of the week should be already there- just no tasks
@@ -35,13 +39,13 @@ function gitGantt() {
     chart_wrapper.appendChild(days_rows)
     chart_wrapper.lastElementChild.lastElementChild.style = "flex: 1;min-width: 80px;text-align: center;"
     //chart_wrapper.lastChild.style = "flex: 1;min-width: 80px;text-align: center;"
-    var tasks = document.createElement("ul")
-    tasks.id = "tasks-list"
     chart_wrapper.appendChild(tasks)
+    console.log(tasks)
     this.chart_setup = chart_wrapper
     this.tasks_list = tasks
     console.log(this.tasks_list)
     this.taskCounter = 0;
+    rerenderTasks()
 
     
     
@@ -50,52 +54,62 @@ function gitGantt() {
 
 gitGantt.prototype = {
     addTask: function(duration, taskName){
-        var newTask = document.createElement("li")
-        newTask.setAttribute("duration", duration)
-        newTask.setAttribute("taskName", taskName)
-        newTask.id = this.taskCounter
-        newTask.style = "position: relative;color: #fff);margin-bottom: 15px;font-size: 16px;border-radius: 20px;padding: 10px 20px;width: 0;opacity: 0;transition: all 0.65s linear 0.2s;"
-        console.log(newTask)
-        var dur_split = duration.split("-")
-        let days_ul = document.getElementById("days-of-week").childNodes
-        let days_arr = [...days_ul]
-        const startDay = dur_split[0];
-        const endDay = dur_split[1];
-        console.log(startDay.slice(0,-2))
-        let left = 0,
-        width = 0;
-  
-        if (startDay.endsWith("½")) {
-        const filteredArray = days_arr.filter(day => day.textContent == startDay.slice(0, -2));
-        left = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2;
-        console.log(filteredArray)
-        } else {
-        const filteredArray = days_arr.filter(day => day.textContent == startDay);
-        left = filteredArray[0].offsetLeft;
-        }
-  
-        if (endDay.endsWith("½")) {
-            const filteredArray = days_arr.filter(day => day.textContent == endDay.slice(0, -2));
-            width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2 - left;
-        } else {
-            const filteredArray = days_arr.filter(day => day.textContent == endDay);
-            width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth - left;
-        }
+        if (duration !=undefined && taskName !=undefined){
+            var newTask = document.createElement("li")
+            newTask.setAttribute("duration", duration)
+            newTask.setAttribute("taskName", taskName)
+            newTask.id = this.taskCounter
+            newTask.style = "list-style: none;position: relative;color: #fff);margin-bottom: 15px;font-size: 16px;border-radius: 20px;padding: 10px 20px;width: 0;opacity: 0;transition: all 0.65s linear 0.2s;"
+            console.log(newTask)
+            var dur_split = duration.split("-")
+            let days_ul = document.getElementById("days-of-week").childNodes
+            let days_arr = [...days_ul]
+            const startDay = dur_split[0];
+            const endDay = dur_split[1];
+            console.log(startDay.slice(0,-2))
+            let left = 0,
+            width = 0;
+    
+            if (startDay.endsWith("½")) {
+            const filteredArray = days_arr.filter(day => day.textContent == startDay.slice(0, -2));
+            left = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2;
+            console.log(filteredArray)
+            } else {
+            const filteredArray = days_arr.filter(day => day.textContent == startDay);
+            left = filteredArray[0].offsetLeft;
+            }
+    
+            if (endDay.endsWith("½")) {
+                const filteredArray = days_arr.filter(day => day.textContent == endDay.slice(0, -2));
+                width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2 - left;
+            } else {
+                const filteredArray = days_arr.filter(day => day.textContent == endDay);
+                width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth - left;
+            }
 
-        newTask.style.left = `${left}px`;
-        newTask.style.width = `${width}px`;
-        newTask.style.backgroundColor = "blue";
-        newTask.style.opacity = 1;
-        newTask.appendChild(document.createTextNode(taskName))
-        newTask.childNodes[0].style = "font-fill: white;"
-        this.tasks_list.appendChild(newTask)
-        console.log(document.getElementById("tasks-list"))
-        this.taskCounter ++;
-        
+            newTask.style.left = `${left}px`;
+            newTask.style.width = `${width}px`;
+            newTask.style.backgroundColor = "blue";
+            newTask.style.opacity = 1;
+            newTask.appendChild(document.createTextNode(taskName))
+            newTask.childNodes[0].style = "font-fill: white;"
+            this.tasks_list.appendChild(newTask)
+            console.log(document.getElementById("tasks-list"))
+            this.taskCounter ++;
+        }
         
     },
-    editTask: function(){
-        
+    editTask: function(taskToEdit, newDuration, newName){
+        // here you can edit a duration or give a task a new name or both
+        var task_edit = document.getElementById(taskToEdit)
+        if (newName != undefined) {
+            task_edit.childNodes[0].textContent = newName
+            console.log(task_edit.childNodes[0])
+        }
+        if (newDuration != undefined){
+            task_edit.setAttribute("duration", newDuration)
+            rerenderTasks()
+        }
     },
     deleteTask: function(taskToDelete){
         var task_item = document.getElementById(taskToDelete)
@@ -107,7 +121,44 @@ gitGantt.prototype = {
     },
 }
 
+function rerenderTasks() {
+    var all_tasks = tasks.childNodes
+    console.log(all_tasks.childNodes)
+    all_tasks.forEach(function(tasks) {
+        var duration = tasks.getAttribute("duration")
+        var dur_split = duration.split("-")
+        let days_ul = document.getElementById("days-of-week").childNodes
+        let days_arr = [...days_ul]
+        const startDay = dur_split[0];
+        const endDay = dur_split[1];
+        console.log(startDay.slice(0,-2))
+        let left = 0,
+        width=0
 
+    
+        if (startDay.endsWith("½")) {
+            const find_corrDay = days_arr.filter(day => day.textContent == startDay.slice(0, -2));
+            left = find_corrDay[0].offsetLeft;
+        } else {
+            const find_corrDay = days_arr.filter(day => day.textContent == startDay);
+            left = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth / 2;
+        }
 
-//window.addEventListener("load", gitGantt)
-window.addEventListener("resize", gitGantt)
+        if (endDay.endsWith("½")) {
+            const find_corrDay = days_arr.filter(day => day.textContent == endDay.slice(0, -2));
+            width = find_corrDay[0].offsetLeft + find_corrDay[0].offsetWidth / 2 - left;
+        } else {
+            const find_corrDay = days_arr.filter(day => day.textContent == endDay);
+            width = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth - left;
+        }
+
+        tasks.style.left = `${left}px`;
+        tasks.style.width = `${width}px`;
+        tasks.style.backgroundColor = "blue";
+        tasks.style.opacity = 1;
+
+    })
+}
+
+window.addEventListener("load", rerenderTasks)
+window.addEventListener("resize", rerenderTasks)
