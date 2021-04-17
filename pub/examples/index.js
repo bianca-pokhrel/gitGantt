@@ -5,9 +5,14 @@ console.log(emptyGantt)
 document.querySelector('#gantt-chart').appendChild(emptyGantt.chart_setup)
 
 
-emptyGantt.addTask("tue-wed1", "Task")
-//emptyGantt.addTask("mon-wed", "Task2")
 
-//emptyGantt.deleteTask("0")
+var addingTasksGantt = new gitGantt();
+console.log(addingTasksGantt)
+document.querySelector('#adding-tasks').appendChild(addingTasksGantt.chart_setup)
+addingTasksGantt.addTask('mon-wed', "Work on final report for BCB430")
+addingTasksGantt.addTask('thu-sat', "Finish JavaScript library")
+addingTasksGantt.addTask('tue1-thu1', "Work on documentation for JavaScript library")
+addingTasksGantt.changeTheme("winter night")
+console.log(addingTasksGantt)
+addingTasksGantt.deleteTask(2)
 
-//emptyGantt.editTask("0", "mon-thu", "Do laundry")

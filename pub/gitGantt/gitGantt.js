@@ -4,8 +4,6 @@
 // need a list of tasks, and their start end time... so maybe in a JSON format? 
 // Keys are tasks and their values are their start/end time?
 
-var tasks = document.createElement("ul")
-tasks.id = "tasks-list"// can do this in add task though... don't need that in the constructor
 
 
 function gitGantt() {
@@ -14,22 +12,26 @@ function gitGantt() {
 
     //this.width = width;
     //this.height = height;
+
+    var tasks = document.createElement("ul")
+    tasks.id = "tasks-list"// can do this in add task though... don't need that in the constructor
+
     
     let  days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
     var chart_wrapper = document.createElement("div")
-    chart_wrapper.style = "max-width: 1150px;padding: 0 10px;margin: 0 auto;background: #f5f7f8;font-size: 16px;font-family: sans-serif;padding-top: 40px; box-sizing: border-box;"
+    chart_wrapper.style = "max-width: 1150px;padding: 0 10px;margin: 0 auto;background: #f5f7f8;font-size: 16px;font-family: didot;padding-top: 40px; box-sizing: border-box;"
     var days_rows = document.createElement("ul")
     days_rows.id = "days-of-week"
     days_rows.style = "list-style: none;position: relative;display: flex;margin-bottom: 20px;font-weight: bold;font-size: 1.2rem;"
     var first_sep = document.createElement("li")
-    first_sep.style = "content: '';position: absolute;right: 0;height: 510px;border-right: 1px solid lightgrey;"
+    first_sep.style = "content: '';position: absolute;right: 0;height: 100%;border-right: 1px solid lightgrey;"
         
     days.forEach(function(day) {
         var day_wrapper = document.createElement("li")
         day_wrapper.id = day
         day_wrapper.style = "flex: 1;min-width: 80px;text-align: center; position: relative;"
         var day_sep = document.createElement("li")
-        day_sep.style = "content: '';position: absolute;right: 0;height: 510px;border-right: 1px solid lightgrey;"
+        day_sep.style = "content: '';position: absolute;right: 0;height: 100%;border-right: 1px solid lightgrey;"
         day_wrapper.appendChild(document.createTextNode(day))
         days_rows.appendChild(day_wrapper)
         day_wrapper.appendChild(day_sep)
@@ -39,13 +41,12 @@ function gitGantt() {
     chart_wrapper.appendChild(days_rows)
     chart_wrapper.lastElementChild.lastElementChild.style = "flex: 1;min-width: 80px;text-align: center;"
     //chart_wrapper.lastChild.style = "flex: 1;min-width: 80px;text-align: center;"
-    chart_wrapper.appendChild(tasks)
-    console.log(tasks)
+    this.tasks = tasks
+    chart_wrapper.appendChild(this.tasks)
+    console.log(this.tasks)
     this.chart_setup = chart_wrapper
-    this.tasks_list = tasks
-    console.log(this.tasks_list)
+    console.log(this.tasks)
     this.taskCounter = 0;
-    rerenderTasks()
 
     
     
@@ -66,25 +67,29 @@ gitGantt.prototype = {
             let days_arr = [...days_ul]
             const startDay = dur_split[0];
             const endDay = dur_split[1];
-            console.log(startDay.slice(0,-2))
+            console.log(startDay.slice(0,-1))
             let left = 0,
             width = 0;
     
             if (startDay.endsWith("1")) {
-            const filteredArray = days_arr.filter(day => day.textContent == startDay.slice(0, -1));
-            left = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2;
-            console.log(filteredArray)
+                const find_corrDay = days_arr.filter(day => day.textContent == startDay.slice(0, -1));
+                left = find_corrDay[0].offsetLeft ;
+                console.log(find_corrDay)
             } else {
-            const filteredArray = days_arr.filter(day => day.textContent == startDay);
-            left = filteredArray[0].offsetLeft;
+                const find_corrDay = days_arr.filter(day => day.textContent == startDay);
+                // like above, this is so nuanced because I added grid lines as list items
+                left = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth / 2 + find_corrDay[0].offsetWidth / 4;
+                console.log(find_corrDay)
             }
     
             if (endDay.endsWith("1")) {
-                const filteredArray = days_arr.filter(day => day.textContent == endDay.slice(0, -1));
-                width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2 - left;
+                const find_corrDay = days_arr.filter(day => day.textContent == endDay.slice(0, -1));
+                width = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth*2;
+                console.log(find_corrDay)
             } else {
-                const filteredArray = days_arr.filter(day => day.textContent == endDay);
-                width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth - left;
+                const find_corrDay = days_arr.filter(day => day.textContent == endDay);
+                width = find_corrDay[0].offsetLeft;
+                console.log(find_corrDay)
             }
 
             newTask.style.left = `${left}px`;
@@ -93,8 +98,8 @@ gitGantt.prototype = {
             newTask.style.opacity = 1;
             newTask.appendChild(document.createTextNode(taskName))
             newTask.childNodes[0].style = "font-fill: white;"
-            this.tasks_list.appendChild(newTask)
-            console.log(document.getElementById("tasks-list"))
+            this.tasks.appendChild(newTask)
+            console.log(this.tasks)
             this.taskCounter ++;
         }
         
@@ -112,17 +117,60 @@ gitGantt.prototype = {
         }
     },
     deleteTask: function(taskToDelete){
-        var task_item = document.getElementById(taskToDelete)
-        task_item.remove()
+        var task_item = this.tasks.childNodes
+        console.log(task_item)
+        var id_num = -1
+        task_item.forEach( function(taskdel){
+            id_num = taskdel.getAttribute("id")
+            if (taskToDelete == id_num){
+                id_num = taskToDelete
+            }
+        })
+        this.tasks.removeChild(this.tasks.childNodes[id_num])
+
 
     },
-    changeTheme: function(){
-
+    changeTheme: function(theme){
+        // theme is one of the 3 options other than the default theme
+        if (theme == "default"){
+            var change_back = this.chart_setup
+            change_back.style= "max-width: 1150px;padding: 0 10px;margin: 0 auto;background: #f5f7f8;font-size: 16px;font-family: didot;padding-top: 40px; box-sizing: border-box;"
+            var change_box = this.tasks.childNodes
+            change_box.forEach(function(colours){
+                colours.style.backgroundColor = "#bdfff8"
+            })
+        }
+        else if (theme == "summer day") {
+            var change_back = this.chart_setup
+            change_back.style= "max-width: 1150px;padding: 0 10px;margin: 0 auto;background: #e6ebff;font-size: 16px;font-family: didot;padding-top: 40px; box-sizing: border-box;"
+            var change_box = this.tasks.childNodes
+            change_box.forEach(function(colours){
+                colours.style.backgroundColor = "#ffea2b"
+            })
+        }
+        else if (theme == "autumn morning"){
+            var change_back = this.chart_setup
+            change_back.style= "max-width: 1150px;padding: 0 10px;margin: 0 auto;background: #95ba99;font-size: 16px;font-family: didot;padding-top: 40px; box-sizing: border-box;"
+            var change_box = this.tasks.childNodes
+            change_box.forEach(function(colours){
+                colours.style.backgroundColor = "#821e1e"
+            })
+        }
+        else if (theme == "winter night"){
+            var change_back = this.chart_setup
+            change_back.style= "max-width: 1150px;padding: 0 10px;margin: 0 auto;background: #1a1c73;font-size: 16px;font-family: didot;padding-top: 40px; box-sizing: border-box;"
+            var change_box = this.tasks.childNodes
+            change_box.forEach(function(colours){
+                colours.style.backgroundColor = "#9b9cc2"
+            })
+        }
     },
 }
 
 function rerenderTasks() {
-    var all_tasks = tasks.childNodes
+    console.log(this.tasks)
+    var all_tasks = this.tasks.childNodes
+    console.log(all_tasks)
     console.log(all_tasks.childNodes)
     all_tasks.forEach(function(tasks) {
         var duration = tasks.getAttribute("duration")
@@ -142,7 +190,8 @@ function rerenderTasks() {
             console.log(find_corrDay)
         } else {
             const find_corrDay = days_arr.filter(day => day.textContent == startDay);
-            left = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth / 2;
+            // like above, this is so nuanced because I added grid lines as list items
+            left = find_corrDay[0].offsetLeft - find_corrDay[0].offsetWidth / 2 + find_corrDay[0].offsetWidth / 4;
             console.log(find_corrDay)
         }
 
@@ -163,5 +212,5 @@ function rerenderTasks() {
     })
 }
 
-window.addEventListener("load", rerenderTasks)
-window.addEventListener("resize", rerenderTasks)
+//window.addEventListener("load", rerenderTasks)
+//window.addEventListener("resize", rerenderTasks)
