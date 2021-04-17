@@ -1,3 +1,4 @@
+"use strict";
 
 // given a new gantt chart instance with parameters, create the gantt chart and in a separate js file, inject into the HTML
 // need a list of tasks, and their start end time... so maybe in a JSON format? 
@@ -7,54 +8,54 @@ function gitGantt() {
     //the constructor should just create an empty gantt chart with height/width specs provided by dev. 
     //the columns for the days of the week should be already there- just no tasks
 
-    this.width = width;
-    this.height = height;
-    this.tasks = [];
-    const days = [];
+    //this.width = width;
+    //this.height = height;
+    
+    let  days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
+    var chart_wrapper = document.createElement("div")
+    chart_wrapper.style = "max-width: 1150px;padding: 0 10px;margin: 0 auto;background: #f5f7f8;font-size: 16px;font-family: sans-serif;padding-top: 40px; box-sizing: border-box;"
+    var days_rows = document.createElement("ul")
+    days_rows.style = "list-style: none;position: relative;display: flex;margin-bottom: 20px;font-weight: bold;font-size: 1.2rem;"
+    var first_sep = document.createElement("li")
+    first_sep.style = "content: '';position: absolute;right: 0;height: 510px;border-right: 1px solid lightgrey;"
+        
+    days.forEach(function(day) {
+        var day_wrapper = document.createElement("li")
+        day_wrapper.style = "flex: 1;min-width: 80px;text-align: center; position: relative;"
+        var day_sep = document.createElement("li")
+        day_sep.style = "content: '';position: absolute;right: 0;height: 510px;border-right: 1px solid lightgrey;"
+        day_wrapper.appendChild(document.createTextNode(day))
+        days_rows.appendChild(day_wrapper)
+        day_wrapper.appendChild(day_sep)
+        
+    })
+    days_rows.lastElementChild.removeChild(days_rows.lastElementChild.lastElementChild)
+    chart_wrapper.appendChild(days_rows)
+    chart_wrapper.lastElementChild.lastElementChild.style = "flex: 1;min-width: 80px;text-align: center;"
+    //chart_wrapper.lastChild.style = "flex: 1;min-width: 80px;text-align: center;"
+    var tasks = document.createElement("ul")
+    chart_wrapper.appendChild(tasks)
+    this.chart_setup = chart_wrapper
+    this.tasks_list = tasks
+    this.taskCounter = 0;
+    
+}
+
+
+gitGantt.prototype = {
+    addTask: function(){
+
+    },
+    editTask: function(){
+
+    },
+    deleteTask: function(){
+
+    },
+    changeTheme: function(){
+
+    },
 }
 
 
 
-function createChart(e) {
-
-    // make a constructor for function, instead of e, needs information 
-    const days = document.querySelectorAll(".chart-values li");
-    console.log(days)
-    const tasks = document.querySelectorAll(".chart-bars li");
-    const daysArray = [...days];
-  
-    tasks.forEach(el => {
-      const duration = el.dataset.duration.split("-");
-      const startDay = duration[0];
-      const endDay = duration[1];
-      let left = 0,
-        width = 0;
-  
-      if (startDay.endsWith("½")) {
-        const filteredArray = daysArray.filter(day => day.textContent == startDay.slice(0, -1));
-        left = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2;
-      } else {
-        const filteredArray = daysArray.filter(day => day.textContent == startDay);
-        left = filteredArray[0].offsetLeft;
-      }
-  
-      if (endDay.endsWith("½")) {
-        const filteredArray = daysArray.filter(day => day.textContent == endDay.slice(0, -1));
-        width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2 - left;
-      } else {
-        const filteredArray = daysArray.filter(day => day.textContent == endDay);
-        width = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth - left;
-      }
-  
-      // apply css
-      el.style.left = `${left}px`;
-      el.style.width = `${width}px`;
-      if (e.type == "load") {
-        el.style.backgroundColor = el.dataset.color;
-        el.style.opacity = 1;
-      }
-    });
-  }
-  
-  window.addEventListener("load", createChart);
-  window.addEventListener("resize", createChart);
