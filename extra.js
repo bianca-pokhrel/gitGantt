@@ -1,9 +1,10 @@
-function createChart() {
+function createChart(e) {
 
     // make a constructor for function, instead of e, needs information 
     const days = document.querySelectorAll(".chart-values li");
-    console.log(days)
+    
     const tasks = document.querySelectorAll(".chart-bars li");
+
     const daysArray = [...days];
     console.log(daysArray)
   
@@ -16,6 +17,7 @@ function createChart() {
   
       if (startDay.endsWith("½")) {
         const filteredArray = daysArray.filter(day => day.textContent == startDay.slice(0, -1));
+        console.log(filteredArray)
         left = filteredArray[0].offsetLeft + filteredArray[0].offsetWidth / 2;
       } else {
         const filteredArray = daysArray.filter(day => day.textContent == startDay);
@@ -40,3 +42,5 @@ function createChart() {
     });
   }
   
+window.addEventListener("load", createChart);
+window.addEventListener("resize", createChart);
