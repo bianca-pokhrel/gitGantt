@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <script type = "text/javascript" src="./gitGantt/gitGantt.js" defer></script>
-        <script type = "text/javascript" src="./examples/index.js" defer></script>
+        <link rel="stylesheet" href="./documentation.css">
 
     </head>
     <body>
@@ -17,11 +16,13 @@
         </p>
 
         <div class="coding-look">
-            <head>
-                <script type = "text/javascript" src="./gitGantt/gitGantt.js" defer></script>
-                <script type = "text/javascript" src="./examples/index.js" defer></script>
-        
-            </head>
+            <p>
+                head <br/>
+                    script type = "text/javascript" src="./gitGantt/gitGantt.js" defer> /script <br/>
+                    script type = "text/javascript" src="./examples/index.js" defer> /script <br/>
+            
+                head <br/>
+            </p>
         </div>
         <br/>
         <p>An external JavaScript file is required to be able to use this library. 
@@ -32,7 +33,12 @@
         <h3> Creating an empty gitGantt chart</h3>
         <p> To create an empty gitGantt chart, please call the constructor with no parameters. An example is provided below:</p>
 
-        <div id="create-empty_chart"></div>
+        <div class="coding-look">
+                var emptyGantt = new gitGantt(); <br/>
+                console.log(emptyGantt) <br/>
+                document.querySelector('#gantt-chart').appendChild(emptyGantt.chart_setup) <br/>
+
+        </div>
 
         <br/>
 
@@ -42,7 +48,15 @@
             These tasks are in the form of list items and are thus easily accessible through the DOM. Please see the example below to see how you can add a task.
         </p>
 
-        <div id="add-tasks-exp"></div>
+        <div class="coding-look">
+            var addingTasksGantt = new gitGantt(); <br/>
+            console.log(addingTasksGantt) <br/>
+            document.querySelector('#adding-tasks').appendChild(addingTasksGantt.chart_setup) <br/>
+            addingTasksGantt.addTask('mon-wed', "Work on final report for BCB430") <br/>
+            addingTasksGantt.addTask('mon-wed', "Finish JavaScript library") <br/>
+            addingTasksGantt.addTask('tue1-thu1', "Work on documentation for JavaScript library") <br/>
+
+        </div>
         <br/>
 
         <h3> chart.deleteTasks(taskID)</h3>
@@ -52,7 +66,9 @@
             Task IDs are sequential starting from 0. Thus, if you want to delete the 3rd task from your gitGantt chart, you pass 2 as your id. See the example below:
         </p>
 
-        <div id="remove-tasks-exp"></div>
+        <div class="coding-look">
+
+        </div>
         <br/>
 
         <h3> chart.editTasks(taskID)</h3>
@@ -63,7 +79,7 @@
             See the example below:
         </p>
 
-        <div id="edit-tasks-exp"></div>
+        <div class="coding-look"></div>
         <br/>
 
         <h3> chart.changeTheme(themeName)</h3>
@@ -72,7 +88,11 @@
             You can choose additional presets such as "summer day", "autumn morning", and "winter night". See the example below!
         </p>
 
-        <div id="change-theme-exp"></div>
+        <div class="coding-look">
+            summerTasksGantt.changeTheme("summer day") <br/>
+            autumnTasksGantt.changeTheme("autumn morning") <br/>
+            winterTasksGantt.changeTheme("winter night") <br/>
+        </div>
         <br/>
         
         <br/>
