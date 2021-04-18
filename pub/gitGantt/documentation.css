@@ -2,6 +2,8 @@ html *
 {
    color: #000 !important;
    font-family: didot;
+   padding-left: 2em;
+   padding-right:2em;
 }
 
 h1 {
@@ -9,7 +11,7 @@ h1 {
 }
 
 #heading{
-    text-align: center;
+    text-align: left;
     margin-top: 2em;
 }
 
@@ -31,7 +33,7 @@ body{
 }
 
 .coding-look{
-    background-color: blanchedalmond;
+    background-color: rgb(245, 239, 229);
     font-family: 'Courier New', Courier, monospace;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
