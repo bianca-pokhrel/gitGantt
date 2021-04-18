@@ -16,7 +16,13 @@
             To run the library please include the following lines to your script tag in your header tag in your HTML document as follows:
         </p>
 
-        <div id="include-script"></div>
+        <div class="coding-look">
+            <head>
+                <script type = "text/javascript" src="./gitGantt/gitGantt.js" defer></script>
+                <script type = "text/javascript" src="./examples/index.js" defer></script>
+        
+            </head>
+        </div>
         <br/>
         <p>An external JavaScript file is required to be able to use this library. 
             Please make sure you include this file in your script tag. In the above example, 
@@ -30,29 +36,49 @@
 
         <br/>
 
+        <h3> chart.addTasks(duration, taskName)</h3>
         <p>
-            
+            The addTasks method in gitGantt allows developers to quickly and efficiently add tasks to their gitGantt chart. 
+            These tasks are in the form of list items and are thus easily accessible through the DOM. Please see the example below to see how you can add a task.
         </p>
+
+        <div id="add-tasks-exp"></div>
         <br/>
 
+        <h3> chart.deleteTasks(taskID)</h3>
+        <p>
+            The deleteTasks method in gitGantt allows developers to quickly and efficiently delete tasks to their gitGantt chart. 
+            These tasks are in the form of list items and are thus easily accessible through the DOM. To delete a task, simply input the taskID. 
+            Task IDs are sequential starting from 0. Thus, if you want to delete the 3rd task from your gitGantt chart, you pass 2 as your id. See the example below:
+        </p>
+
+        <div id="remove-tasks-exp"></div>
+        <br/>
+
+        <h3> chart.editTasks(taskID)</h3>
+        <p>
+            The editTasks method in gitGantt allows developers to quickly and efficiently edit tasks in their gitGantt chart. 
+            To edit a task, simply include the taskID you want to edit, and either the duration you want to edit or the task name you want to edit or both! 
+            These tasks are in the form of list items and are thus easily accessible through the DOM. Thus, if you want to edit the 3rd task from your gitGantt chart, you pass 2 as your id and your respective duration and/or name edits. 
+            See the example below:
+        </p>
+
+        <div id="edit-tasks-exp"></div>
+        <br/>
+
+        <h3> chart.changeTheme(themeName)</h3>
         <p>
             Lastly, we can change our themes. In this version of the library, we have 4 available themes including the default theme.
-            You can choose additional presents such as "summer day", "autumn morning", and "winter night". Here they are in order below!
+            You can choose additional presets such as "summer day", "autumn morning", and "winter night". See the example below!
         </p>
 
-        <div id="summer-day-theme"></div>
-
+        <div id="change-theme-exp"></div>
         <br/>
-        <div id="autumn-morning-theme"></div>
-        <br/>
-        <div id="winter-night-theme"></div>
-
-        <br/>
+        
         <br/>
 
         <p>
-            I hope you enjoy using this library! Please find the documentation at the link below:
+            I hope you enjoy using this library! Please find the landing page at the link below:
         </p>
 
-        <h4>
     </body>
