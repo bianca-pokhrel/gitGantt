@@ -26,4 +26,4 @@ https://pacific-ridge-17718.herokuapp.com/gitGantt/documentation.html
 
 
 
-design inspired from : https://webdesign.tutsplus.com/tutorials/build-a-simple-gantt-chart-with-css-and-javascript--cms-33813
+design inspired from :  George Martsoukos
